@@ -28,7 +28,7 @@ from modules.authentication.serializers import (
     RegisterSerializer,
     ActivationSerializer,
 )
-
+from modules.users.user_service import UserService
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
