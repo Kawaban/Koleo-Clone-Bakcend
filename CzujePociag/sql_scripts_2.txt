@@ -1,0 +1,290 @@
+INSERT INTO train_train (id, number, created_at, updated_at)
+VALUES
+  (1, 'IC2000', datetime('now'), datetime('now')),
+  (2, 'IC2001', datetime('now'), datetime('now')),
+  (3, 'IC2002', datetime('now'), datetime('now')),
+  (4, 'IC2003', datetime('now'), datetime('now')),
+  (5, 'IC2004', datetime('now'), datetime('now')),
+  (6, 'IC2005', datetime('now'), datetime('now')),
+  (7, 'IC2006', datetime('now'), datetime('now')),
+  (8, 'IC2007', datetime('now'), datetime('now')),
+  (9, 'IC2008', datetime('now'), datetime('now')),
+  (10, 'IC2009', datetime('now'), datetime('now')),
+  (11, 'IC2010', datetime('now'), datetime('now')),
+  (12, 'IC2011', datetime('now'), datetime('now')),
+  (13, 'IC2012', datetime('now'), datetime('now')),
+  (14, 'IC2013', datetime('now'), datetime('now')),
+  (15, 'IC2014', datetime('now'), datetime('now')),
+  (16, 'IC2015', datetime('now'), datetime('now')),
+  (17, 'IC2016', datetime('now'), datetime('now')),
+  (18, 'IC2017', datetime('now'), datetime('now'));
+
+
+INSERT INTO train_wagon (id, train_id, wagon_number, created_at, updated_at) VALUES
+(1, 1, 'WGN01', datetime('now'), datetime('now')),
+(2, 1, 'WGN02', datetime('now'), datetime('now')),
+(3, 1, 'WGN03', datetime('now'), datetime('now'));
+
+INSERT INTO train_seat (id, wagon_id, seat_number, is_available, created_at, updated_at) VALUES
+(1, 1, '1A', TRUE, datetime('now'), datetime('now')),
+(2, 1, '1B', TRUE, datetime('now'), datetime('now')),
+(3, 1, '1C', FALSE, datetime('now'), datetime('now')),
+(4, 1, '2A', TRUE, datetime('now'), datetime('now')),
+(5, 1, '2B', TRUE, datetime('now'), datetime('now')),
+(6, 2, '1A', TRUE, datetime('now'), datetime('now')),
+(7, 2, '1B', FALSE, datetime('now'), datetime('now')),
+(8, 2, '1C', TRUE, datetime('now'), datetime('now')),
+(9, 3, '1A', TRUE, datetime('now'), datetime('now'));
+
+-- Wagons and Seats for train IC2001 (train_id: 2)
+INSERT INTO train_wagon (id, train_id, wagon_number, created_at, updated_at) VALUES
+(4, 2, 'WGN01', datetime('now'), datetime('now')),
+(5, 2, 'WGN02', datetime('now'), datetime('now')),
+(6, 2, 'WGN03', datetime('now'), datetime('now')),
+(7, 2, 'WGN04', datetime('now'), datetime('now'));
+
+INSERT INTO train_seat (id, wagon_id, seat_number, is_available, created_at, updated_at) VALUES
+(10, 4, '1A', TRUE, datetime('now'), datetime('now')),
+(11, 4, '1B', TRUE, datetime('now'), datetime('now')),
+(12, 4, '1C', TRUE, datetime('now'), datetime('now')),
+(13, 5, '1A', FALSE, datetime('now'), datetime('now')),
+(14, 5, '1B', TRUE, datetime('now'), datetime('now')),
+(15, 6, '1A', TRUE, datetime('now'), datetime('now')),
+(16, 6, '1B', TRUE, datetime('now'), datetime('now')),
+(17, 7, '1A', TRUE, datetime('now'), datetime('now'));
+
+
+-- Wagons and Seats for train IC2002 (train_id: 3)
+INSERT INTO train_wagon (id, train_id, wagon_number, created_at, updated_at) VALUES
+(8, 3, 'WGN01', datetime('now'), datetime('now')),
+(9, 3, 'WGN02', datetime('now'), datetime('now'));
+
+INSERT INTO train_seat (id, wagon_id, seat_number, is_available, created_at, updated_at) VALUES
+(18, 8, '1A', TRUE, datetime('now'), datetime('now')),
+(19, 8, '1B', TRUE, datetime('now'), datetime('now')),
+(20, 9, '1A', TRUE, datetime('now'), datetime('now')),
+(21, 9, '1B', FALSE, datetime('now'), datetime('now'));
+
+-- Wagons and Seats for train IC2003 (train_id: 4)
+INSERT INTO train_wagon (id, train_id, wagon_number, created_at, updated_at) VALUES
+(10, 4, 'WGN01', datetime('now'), datetime('now')),
+(11, 4, 'WGN02', datetime('now'), datetime('now')),
+(12, 4, 'WGN03', datetime('now'), datetime('now'));
+
+INSERT INTO train_seat (id, wagon_id, seat_number, is_available, created_at, updated_at) VALUES
+(22, 10, '1A', TRUE, datetime('now'), datetime('now')),
+(23, 10, '1B', TRUE, datetime('now'), datetime('now')),
+(24, 11, '1A', TRUE, datetime('now'), datetime('now')),
+(25, 12, '1A', FALSE, datetime('now'), datetime('now'));
+
+-- Wagons and Seats for train IC2004 (train_id: 5)
+INSERT INTO train_wagon (id, train_id, wagon_number, created_at, updated_at) VALUES
+(13, 5, 'WGN01', datetime('now'), datetime('now')),
+(14, 5, 'WGN02', datetime('now'), datetime('now')),
+(15, 5, 'WGN03', datetime('now'), datetime('now')),
+(16, 5, 'WGN04', datetime('now'), datetime('now'));
+
+INSERT INTO train_seat (id, wagon_id, seat_number, is_available, created_at, updated_at) VALUES
+(26, 13, '1A', TRUE, datetime('now'), datetime('now')),
+(27, 13, '1B', TRUE, datetime('now'), datetime('now')),
+(28, 14, '1A', FALSE, datetime('now'), datetime('now')),
+(29, 14, '1B', TRUE, datetime('now'), datetime('now')),
+(30, 15, '1A', TRUE, datetime('now'), datetime('now')),
+(31, 16, '1A', TRUE, datetime('now'), datetime('now'));
+
+-- Wagons and Seats for train IC2005 (train_id: 6)
+INSERT INTO train_wagon (id, train_id, wagon_number, created_at, updated_at) VALUES
+(17, 6, 'WGN01', datetime('now'), datetime('now')),
+(18, 6, 'WGN02', datetime('now'), datetime('now'));
+
+INSERT INTO train_seat (id, wagon_id, seat_number, is_available, created_at, updated_at) VALUES
+(32, 17, '1A', TRUE, datetime('now'), datetime('now')),
+(33, 17, '1B', TRUE, datetime('now'), datetime('now')),
+(34, 18, '1A', FALSE, datetime('now'), datetime('now'));
+
+-- Wagons and Seats for train IC2006 (train_id: 7)
+INSERT INTO train_wagon (id, train_id, wagon_number, created_at, updated_at) VALUES
+(19, 7, 'WGN01', datetime('now'), datetime('now')),
+(20, 7, 'WGN02', datetime('now'), datetime('now')),
+(21, 7, 'WGN03', datetime('now'), datetime('now'));
+
+INSERT INTO train_seat (id, wagon_id, seat_number, is_available, created_at, updated_at) VALUES
+(35, 19, '1A', TRUE, datetime('now'), datetime('now')),
+(36, 19, '1B', TRUE, datetime('now'), datetime('now')),
+(37, 20, '1A', FALSE, datetime('now'), datetime('now')),
+(38, 21, '1A', TRUE, datetime('now'), datetime('now'));
+
+-- Wagons and Seats for train IC2007 (train_id: 8)
+INSERT INTO train_wagon (id, train_id, wagon_number, created_at, updated_at) VALUES
+(22, 8, 'WGN01', datetime('now'), datetime('now')),
+(23, 8, 'WGN02', datetime('now'), datetime('now')),
+(24, 8, 'WGN03', datetime('now'), datetime('now')),
+(25, 8, 'WGN04', datetime('now'), datetime('now'));
+
+INSERT INTO train_seat (id, wagon_id, seat_number, is_available, created_at, updated_at) VALUES
+(39, 22, '1A', TRUE, datetime('now'), datetime('now')),
+(40, 22, '1B', TRUE, datetime('now'), datetime('now')),
+(41, 23, '1A', FALSE, datetime('now'), datetime('now')),
+(42, 23, '1B', TRUE, datetime('now'), datetime('now')),
+(43, 24, '1A', TRUE, datetime('now'), datetime('now')),
+(44, 25, '1A', TRUE, datetime('now'), datetime('now'));
+
+-- Wagons and Seats for train IC2008 (train_id: 9)
+INSERT INTO train_wagon (id, train_id, wagon_number, created_at, updated_at) VALUES
+(26, 9, 'WGN01', datetime('now'), datetime('now')),
+(27, 9, 'WGN02', datetime('now'), datetime('now'));
+
+INSERT INTO train_seat (id, wagon_id, seat_number, is_available, created_at, updated_at) VALUES
+(45, 26, '1A', TRUE, datetime('now'), datetime('now')),
+(46, 26, '1B', FALSE, datetime('now'), datetime('now')),
+(47, 27, '1A', TRUE, datetime('now'), datetime('now'));
+
+-- Wagons and Seats for train IC2009 (train_id: 10)
+INSERT INTO train_wagon (id, train_id, wagon_number, created_at, updated_at) VALUES
+(28, 10, 'WGN01', datetime('now'), datetime('now')),
+(29, 10, 'WGN02', datetime('now'), datetime('now')),
+(30, 10, 'WGN03', datetime('now'), datetime('now')),
+(31, 10, 'WGN04', datetime('now'), datetime('now'));
+
+INSERT INTO train_seat (id, wagon_id, seat_number, is_available, created_at, updated_at) VALUES
+(48, 28, '1A', TRUE, datetime('now'), datetime('now')),
+(49, 28, '1B', TRUE, datetime('now'), datetime('now')),
+(50, 29, '1A', FALSE, datetime('now'), datetime('now')),
+(51, 29, '1B', TRUE, datetime('now'), datetime('now')),
+(52, 30, '1A', TRUE, datetime('now'), datetime('now')),
+(53, 31, '1A', TRUE, datetime('now'), datetime('now'));
+
+-- Wagons and Seats for train IC2010 (train_id: 11)
+INSERT INTO train_wagon (id, train_id, wagon_number, created_at, updated_at) VALUES
+(32, 11, 'WGN01', datetime('now'), datetime('now')),
+(33, 11, 'WGN02', datetime('now'), datetime('now'));
+
+INSERT INTO train_seat (id, wagon_id, seat_number, is_available, created_at, updated_at) VALUES
+(54, 32, '1A', TRUE, datetime('now'), datetime('now')),
+(55, 32, '1B', TRUE, datetime('now'), datetime('now')),
+(56, 33, '1A', FALSE, datetime('now'), datetime('now'));
+
+-- Wagons and Seats for train IC2011 (train_id: 12)
+INSERT INTO train_wagon (id, train_id, wagon_number, created_at, updated_at) VALUES
+(34, 12, 'WGN01', datetime('now'), datetime('now')),
+(35, 12, 'WGN02', datetime('now'), datetime('now')),
+(36, 12, 'WGN03', datetime('now'), datetime('now'));
+
+INSERT INTO train_seat (id, wagon_id, seat_number, is_available, created_at, updated_at) VALUES
+(57, 34, '1A', TRUE, datetime('now'), datetime('now')),
+(58, 34, '1B', TRUE, datetime('now'), datetime('now')),
+(59, 35, '1A', FALSE, datetime('now'), datetime('now')),
+(60, 36, '1A', TRUE, datetime('now'), datetime('now'));
+
+-- Wagons and Seats for train IC2012 (train_id: 13)
+INSERT INTO train_wagon (id, train_id, wagon_number, created_at, updated_at) VALUES
+(37, 13, 'WGN01', datetime('now'), datetime('now')),
+(38, 13, 'WGN02', datetime('now'), datetime('now'));
+
+INSERT INTO train_seat (id, wagon_id, seat_number, is_available, created_at, updated_at) VALUES
+(61, 37, '1A', TRUE, datetime('now'), datetime('now')),
+(62, 37, '1B', TRUE, datetime('now'), datetime('now')),
+(63, 38, '1A', TRUE, datetime('now'), datetime('now')),
+(64, 38, '1B', FALSE, datetime('now'), datetime('now'));
+
+-- Wagons and Seats for train IC2013 (train_id: 14)
+INSERT INTO train_wagon (id, train_id, wagon_number, created_at, updated_at) VALUES
+(39, 14, 'WGN01', datetime('now'), datetime('now')),
+(40, 14, 'WGN02', datetime('now'), datetime('now')),
+(41, 14, 'WGN03', datetime('now'), datetime('now')),
+(42, 14, 'WGN04', datetime('now'), datetime('now'));
+
+INSERT INTO train_seat (id, wagon_id, seat_number, is_available, created_at, updated_at) VALUES
+(65, 39, '1A', TRUE, datetime('now'), datetime('now')),
+(66, 39, '1B', TRUE, datetime('now'), datetime('now')),
+(67, 40, '1A', FALSE, datetime('now'), datetime('now')),
+(68, 40, '1B', TRUE, datetime('now'), datetime('now')),
+(69, 41, '1A', TRUE, datetime('now'), datetime('now')),
+(70, 42, '1A', TRUE, datetime('now'), datetime('now'));
+
+-- Wagons and Seats for train IC2014 (train_id: 15)
+INSERT INTO train_wagon (id, train_id, wagon_number, created_at, updated_at) VALUES
+(43, 15, 'WGN01', datetime('now'), datetime('now')),
+(44, 15, 'WGN02', datetime('now'), datetime('now')),
+(45, 15, 'WGN03', datetime('now'), datetime('now'));
+
+INSERT INTO train_seat (id, wagon_id, seat_number, is_available, created_at, updated_at) VALUES
+(71, 43, '1A', TRUE, datetime('now'), datetime('now')),
+(72, 43, '1B', TRUE, datetime('now'), datetime('now')),
+(73, 44, '1A', FALSE, datetime('now'), datetime('now')),
+(74, 45, '1A', TRUE, datetime('now'), datetime('now'));
+INSERT INTO connections_station (id, name, code, city, latitude, longitude, created_at, updated_at)
+VALUES
+  (1, 'Warszawa Centralna', 'WAWCEN', 'Warsaw', 52.2297, 21.0122, datetime('now'), datetime('now')),
+  (2, 'Kraków Główny', 'KRKGL', 'Kraków', 50.0647, 19.9450, datetime('now'), datetime('now')),
+  (3, 'Gdańsk Główny', 'GDNGL', 'Gdańsk', 54.3520, 18.6466, datetime('now'), datetime('now')),
+  (4, 'Wrocław Główny', 'WRCGL', 'Wrocław', 51.1079, 17.0385, datetime('now'), datetime('now')),
+  (5, 'Poznań Główny', 'POZGL', 'Poznań', 52.4064, 16.9252, datetime('now'), datetime('now')),
+  (6, 'Lublin Główny', 'LBLGL', 'Lublin', 51.2465, 22.5684, datetime('now'), datetime('now')),
+  (7, 'Katowice', 'KTW', 'Katowice', 50.2649, 19.0238, datetime('now'), datetime('now')),
+  (8, 'Łódź Fabryczna', 'LDZFAB', 'Łódź', 51.7592, 19.4550, datetime('now'), datetime('now')),
+  (9, 'Białystok', 'BIA', 'Białystok', 53.1325, 23.1688, datetime('now'), datetime('now')),
+  (10, 'Szczecin Główny', 'SZCGL', 'Szczecin', 53.4285, 14.5528, datetime('now'), datetime('now'));
+
+INSERT INTO connections_connection (
+  id, train_number, departure_station_id, arrival_station_id,
+  departure_time, arrival_time, price, created_at, updated_at
+) VALUES
+  -- Connections originating from Warszawa Centralna (ID: 1)
+  (1, 'IC2000', 1, 2, '2025-06-25 08:00:00', '2025-06-25 10:30:00', 85.29, datetime('now'), datetime('now')), -- WAW to KRK
+  (2, 'IC2001', 1, 3, '2025-06-25 09:00:00', '2025-06-25 12:45:00', 105.55, datetime('now'), datetime('now')), -- WAW to GDN
+  (3, 'IC2002', 1, 4, '2025-06-25 10:00:00', '2025-06-25 13:45:00', 91.94, datetime('now'), datetime('now')), -- WAW to WRC
+  (4, 'IC2003', 1, 5, '2025-06-25 11:30:00', '2025-06-25 14:30:00', 67.14, datetime('now'), datetime('now')), -- WAW to POZ
+  (5, 'IC2004', 1, 8, '2025-06-25 13:00:00', '2025-06-25 14:30:00', 45.00, datetime('now'), datetime('now')), -- WAW to LDZ (shorter travel)
+  (6, 'IC2005', 1, 9, '2025-06-25 14:00:00', '2025-06-25 17:00:00', 62.25, datetime('now'), datetime('now')), -- WAW to BIA
+
+  -- Connections returning to Warszawa Centralna (ID: 1)
+  (7, 'IC2006', 4, 1, '2025-06-25 06:00:00', '2025-06-25 13:45:00', 89.00, datetime('now'), datetime('now')), -- WRC to WAW
+  (8, 'IC2007', 2, 1, '2025-06-25 16:00:00', '2025-06-25 18:30:00', 87.50, datetime('now'), datetime('now')), -- KRK to WAW
+  (9, 'IC2008', 3, 1, '2025-06-25 17:00:00', '2025-06-25 20:45:00', 108.00, datetime('now'), datetime('now')), -- GDN to WAW
+  (10, 'IC2009', 5, 1, '2025-06-25 18:00:00', '2025-06-25 21:00:00', 69.50, datetime('now'), datetime('now')), -- POZ to WAW
+
+  -- Inter-city connections (not involving Warszawa Centralna as origin/destination)
+  (11, 'IC2010', 2, 4, '2025-06-25 07:30:00', '2025-06-25 10:45:00', 77.18, datetime('now'), datetime('now')), -- KRK to WRC
+  (12, 'IC2011', 4, 2, '2025-06-25 11:30:00', '2025-06-25 14:45:00', 75.00, datetime('now'), datetime('now')), -- WRC to KRK
+  (13, 'IC2012', 3, 5, '2025-06-25 09:30:00', '2025-06-25 12:30:00', 88.00, datetime('now'), datetime('now')), -- GDN to POZ
+  (14, 'IC2013', 5, 3, '2025-06-25 13:00:00', '2025-06-25 16:00:00', 89.00, datetime('now'), datetime('now')), -- POZ to GDN
+  (15, 'IC2014', 7, 2, '2025-06-25 06:00:00', '2025-06-25 08:00:00', 50.00, datetime('now'), datetime('now')), -- KTW to KRK
+  (16, 'IC2015', 2, 7, '2025-06-25 08:30:00', '2025-06-25 10:30:00', 51.00, datetime('now'), datetime('now')), -- KRK to KTW
+  (17, 'IC2016', 4, 7, '2025-06-25 10:00:00', '2025-06-25 12:30:00', 65.00, datetime('now'), datetime('now')), -- WRC to KTW
+  (18, 'IC2017', 7, 4, '2025-06-25 13:00:00', '2025-06-25 15:30:00', 66.00, datetime('now'), datetime('now')); -- KTW to WRC
+-- Wagons and Seats for train IC2015 (train_id: 16)
+INSERT INTO train_wagon (id, train_id, wagon_number, created_at, updated_at) VALUES
+(46, 16, 'WGN01', datetime('now'), datetime('now')),
+(47, 16, 'WGN02', datetime('now'), datetime('now'));
+
+INSERT INTO train_seat (id, wagon_id, seat_number, is_available, created_at, updated_at) VALUES
+(75, 46, '1A', TRUE, datetime('now'), datetime('now')),
+(76, 46, '1B', TRUE, datetime('now'), datetime('now')),
+(77, 47, '1A', TRUE, datetime('now'), datetime('now'));
+
+-- Wagons and Seats for train IC2016 (train_id: 17)
+INSERT INTO train_wagon (id, train_id, wagon_number, created_at, updated_at) VALUES
+(48, 17, 'WGN01', datetime('now'), datetime('now')),
+(49, 17, 'WGN02', datetime('now'), datetime('now')),
+(50, 17, 'WGN03', datetime('now'), datetime('now')),
+(51, 17, 'WGN04', datetime('now'), datetime('now'));
+
+INSERT INTO train_seat (id, wagon_id, seat_number, is_available, created_at, updated_at) VALUES
+(78, 48, '1A', TRUE, datetime('now'), datetime('now')),
+(79, 48, '1B', TRUE, datetime('now'), datetime('now')),
+(80, 49, '1A', FALSE, datetime('now'), datetime('now')),
+(81, 49, '1B', TRUE, datetime('now'), datetime('now')),
+(82, 50, '1A', TRUE, datetime('now'), datetime('now')),
+(83, 51, '1A', TRUE, datetime('now'), datetime('now'));
+
+-- Wagons and Seats for train IC2017 (train_id: 18)
+INSERT INTO train_wagon (id, train_id, wagon_number, created_at, updated_at) VALUES
+(52, 18, 'WGN01', datetime('now'), datetime('now')),
+(53, 18, 'WGN02', datetime('now'), datetime('now'));
+
+INSERT INTO train_seat (id, wagon_id, seat_number, is_available, created_at, updated_at) VALUES
+(84, 52, '1A', TRUE, datetime('now'), datetime('now')),
+(85, 52, '1B', TRUE, datetime('now'), datetime('now')),
+(86, 53, '1A', FALSE, datetime('now'), datetime('now'));
+

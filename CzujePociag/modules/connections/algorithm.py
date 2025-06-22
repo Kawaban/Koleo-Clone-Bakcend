@@ -1,5 +1,6 @@
 import heapq
 from datetime import datetime
+from decimal import Decimal
 
 from django.db import connections
 from geopy.distance import geodesic
@@ -39,6 +40,9 @@ class Edge:
         self.end_stop = end_stop
         self.price = price
 
+    def __str__(self):
+        return self.line
+
     def get_optimization_cost(self,optimization_key, current_time, current_line):
         time_format = "%H:%M:%S"
         t1 = datetime.strptime(current_time, time_format)
@@ -57,6 +61,9 @@ class Node:
         self.stop = stop
         self.lat = lat
         self.lon = lon
+
+    def __str__(self):
+        return self.stop
 
 
 class Graph(metaclass=SingletonMeta):
@@ -99,13 +106,15 @@ class Graph(metaclass=SingletonMeta):
             if end_stop not in self.adjacency_list:
                 self.adjacency_list[end_stop] = []
 
-            self.adjacency_list[start_stop].append(edge)
+            self.adjacency_list[start_stop].append(edge.id)
 
 
 
 class Algorithm:
-    def calculate_path(self,start_stop: str, end_stop: str, optimization_key: str, start_time: str):
+    def calculate_path(self,start_stop: str, end_stop: str, optimization_key: str, start_time: str = "00:00:00"):
         graph = Graph()
+
+
         time_format = "%H:%M:%S"
         def get_edge_ids(previous_nodes, edge_ids, start, end):
             path_edges = []
@@ -125,7 +134,7 @@ class Algorithm:
             current_departure_time = None
             prev_end_stop = None
             prev_arrival_time = None
-            current_price = 0.0
+            current_price = Decimal('0.0')
             for edge_id in edges:
                 if current_train is None or graph.edges[edge_id].line == current_train:
                     if current_train is None:
@@ -152,6 +161,16 @@ class Algorithm:
                     prev_end_stop = graph.edges[edge_id].end_stop
                     prev_arrival_time = graph.edges[edge_id].arrival_time
                     current_price = graph.edges[edge_id].price
+            formatted_edges.append(Result(
+                cost=current_price,
+                duration=(datetime.strptime(prev_arrival_time, time_format) - datetime.strptime(current_departure_time,
+                                                                                                time_format)).total_seconds(),
+                train_number=current_train,
+                departure_time=current_departure_time,
+                arrival_time=prev_arrival_time,
+                start_stop=current_start_stop,
+                end_stop=prev_end_stop
+            ))
             return formatted_edges
 
         def heuristic(node):
@@ -176,6 +195,7 @@ class Algorithm:
                 continue
 
             for neighbor in graph.adjacency_list[current_node]:
+
                 distance = shortest_paths[current_node] + graph.edges[neighbor].get_optimization_cost(optimization_key,
                                                                                                       current_time,
                                                                                                       current_line)
@@ -187,7 +207,7 @@ class Algorithm:
                     heapq.heappush(priority_queue,
                                    (f_score, distance, graph.edges[neighbor].end_stop,
                                     graph.edges[neighbor].arrival_time,
-                                    (graph.edges[neighbor].company, graph.edges[neighbor].line)))
+                                     graph.edges[neighbor].line))
 
         return []
 

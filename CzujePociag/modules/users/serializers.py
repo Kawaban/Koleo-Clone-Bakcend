@@ -26,8 +26,8 @@ class TicketSerializer(serializers.Serializer):
 
     def to_representation(self, instance):
         return {
-            'seat_number': instance.seat_number,
-            'wagon_number': instance.wagon_number,
+            'seat_number': instance.seat,
+            'wagon_number': instance.wagon,
             'train_number': instance.train_number,
             'departure_station': instance.departure_station,
             'arrival_station': instance.arrival_station,

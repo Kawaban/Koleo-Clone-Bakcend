@@ -1,5 +1,6 @@
 from django.db import connection
 from django.shortcuts import render
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
@@ -12,14 +13,16 @@ from modules.connections.serializers import ConnectionSearchSerializer, Connecti
 
 
 class ConnectionsView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         connection_request = ConnectionSearchSerializer(data=request.data)
         if not connection_request.is_valid():
             return Response(connection_request.errors, status=400)
-        result = Algorithm().calculate_path(connection_request.arrival_station, connection_request.departure_station,'t', connection_request.date)
-        return Response({"content":ConnectionResponseSerializer(result,many=True)}, status=200)
+        result = Algorithm().calculate_path(connection_request.validated_data['departure_station'],connection_request.validated_data['arrival_station'],'t')
+        return Response({"content":ConnectionResponseSerializer(result,many=True).data}, status=200)
 
 class StationView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         stations = Station.objects.all()
         return Response({"stations": [station.name for station in stations]}, status=200)
