@@ -111,23 +111,21 @@ class Graph(metaclass=SingletonMeta):
 
 
 class Algorithm:
-    def calculate_path(self,start_stop: str, end_stop: str, optimization_key: str, start_time: str = "00:00:00"):
+    def calculate_path(self, start_stop: str, end_stop: str, optimization_key: str, start_time: str = "00:00:00", n_paths: int = 1):
         graph = Graph()
-
-
         time_format = "%H:%M:%S"
-        def get_edge_ids(previous_nodes, edge_ids, start, end):
+
+        def get_edge_ids(prev_nodes, edge_ids, start, end):
             path_edges = []
             current = end
             while current is not None and current != start:
-                if previous_nodes[current] is not None:
+                if prev_nodes[current] is not None:
                     path_edges.append(edge_ids[current])
-                current = previous_nodes[current]
+                current = prev_nodes[current]
             path_edges.reverse()
             return path_edges
 
         def format_output(edges):
-            time_format = "%H:%M:%S"
             formatted_edges = []
             current_train = None
             current_start_stop = None
@@ -136,18 +134,19 @@ class Algorithm:
             prev_arrival_time = None
             current_price = Decimal('0.0')
             for edge_id in edges:
-                if current_train is None or graph.edges[edge_id].line == current_train:
+                edge = graph.edges[edge_id]
+                if current_train is None or edge.line == current_train:
                     if current_train is None:
-                        current_train = graph.edges[edge_id].line
-                        current_start_stop = graph.edges[edge_id].start_stop
-                        current_departure_time = graph.edges[edge_id].departure_time
-                    prev_end_stop = graph.edges[edge_id].end_stop
-                    prev_arrival_time = graph.edges[edge_id].arrival_time
-                    current_price += graph.edges[edge_id].price
+                        current_train = edge.line
+                        current_start_stop = edge.start_stop
+                        current_departure_time = edge.departure_time
+                    prev_end_stop = edge.end_stop
+                    prev_arrival_time = edge.arrival_time
+                    current_price += edge.price
                 else:
                     formatted_edges.append(Result(
                         cost=current_price,
-                        duration= (datetime.strptime(prev_arrival_time, time_format) - datetime.strptime(current_departure_time, time_format)).total_seconds(),
+                        duration=(datetime.strptime(prev_arrival_time, time_format) - datetime.strptime(current_departure_time, time_format)).total_seconds(),
                         train_number=current_train,
                         departure_time=current_departure_time,
                         arrival_time=prev_arrival_time,
@@ -155,16 +154,15 @@ class Algorithm:
                         end_stop=prev_end_stop
                     ))
 
-                    current_train = graph.edges[edge_id].line
-                    current_start_stop = graph.edges[edge_id].start_stop
-                    current_departure_time = graph.edges[edge_id].departure_time
-                    prev_end_stop = graph.edges[edge_id].end_stop
-                    prev_arrival_time = graph.edges[edge_id].arrival_time
-                    current_price = graph.edges[edge_id].price
+                    current_train = edge.line
+                    current_start_stop = edge.start_stop
+                    current_departure_time = edge.departure_time
+                    prev_end_stop = edge.end_stop
+                    prev_arrival_time = edge.arrival_time
+                    current_price = edge.price
             formatted_edges.append(Result(
                 cost=current_price,
-                duration=(datetime.strptime(prev_arrival_time, time_format) - datetime.strptime(current_departure_time,
-                                                                                                time_format)).total_seconds(),
+                duration=(datetime.strptime(prev_arrival_time, time_format) - datetime.strptime(current_departure_time, time_format)).total_seconds(),
                 train_number=current_train,
                 departure_time=current_departure_time,
                 arrival_time=prev_arrival_time,
@@ -176,38 +174,43 @@ class Algorithm:
         def heuristic(node):
             return geodesic((node.lat, node.lon), (graph.nodes[end_stop].lat, graph.nodes[end_stop].lon)).km * 3
 
-        priority_queue = [(0, 0, start_stop, start_time, (None, None))]
-        shortest_paths = {node: float('inf') for node in graph.nodes.keys()}
-        shortest_paths[start_stop] = 0
-        previous_nodes = {node: None for node in graph.nodes}
-        edge_ids = {node: None for node in graph.nodes}
 
-        while priority_queue:
-            c_d, current_distance, current_node, current_time, current_line = heapq.heappop(priority_queue)
+        open_set = []
+        heapq.heappush(open_set, (0, 0, start_stop, start_time, (None, None), [], []))
 
-            if current_distance > shortest_paths[current_node]:
-                continue
+        found_paths = []
+
+        while open_set and len(found_paths) < n_paths:
+            f_score, cost_so_far, current_node, current_time, current_line, path_nodes, path_edge_ids = heapq.heappop(open_set)
+
+            new_path_nodes = path_nodes + [current_node]
 
             if current_node == end_stop:
-                return format_output(get_edge_ids(previous_nodes, edge_ids, start_stop, end_stop))
+                found_paths.append(format_output(path_edge_ids))
+                continue
 
             if current_node not in graph.adjacency_list:
                 continue
 
-            for neighbor in graph.adjacency_list[current_node]:
+            for edge_id in graph.adjacency_list[current_node]:
+                edge = graph.edges[edge_id]
+                neighbor = edge.end_stop
 
-                distance = shortest_paths[current_node] + graph.edges[neighbor].get_optimization_cost(optimization_key,
-                                                                                                      current_time,
-                                                                                                      current_line)
-                if distance < shortest_paths[graph.edges[neighbor].end_stop]:
-                    shortest_paths[graph.edges[neighbor].end_stop] = distance
-                    f_score = distance + heuristic(graph.nodes[graph.edges[neighbor].end_stop])
-                    previous_nodes[graph.edges[neighbor].end_stop] = current_node
-                    edge_ids[graph.edges[neighbor].end_stop] = graph.edges[neighbor].id
-                    heapq.heappush(priority_queue,
-                                   (f_score, distance, graph.edges[neighbor].end_stop,
-                                    graph.edges[neighbor].arrival_time,
-                                     graph.edges[neighbor].line))
+                if neighbor in new_path_nodes:
+                    continue
 
-        return []
+                new_cost = cost_so_far + edge.get_optimization_cost(optimization_key, current_time, current_line)
+                est_total = new_cost + heuristic(graph.nodes[neighbor])
+                new_path_edges = path_edge_ids + [edge.id]
 
+                heapq.heappush(open_set, (
+                    est_total,
+                    new_cost,
+                    neighbor,
+                    edge.arrival_time,
+                    edge.line,
+                    new_path_nodes,
+                    new_path_edges
+                ))
+
+        return found_paths

@@ -7,9 +7,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from modules.connections.algorithm import Algorithm
+from modules.connections.algorithm import Algorithm, Result
 from modules.connections.models import Station
-from modules.connections.serializers import ConnectionSearchSerializer, ConnectionResponseSerializer
+from modules.connections.serializers import ConnectionSearchSerializer, ConnectionResponseSerializer, ResultSerializer
 
 
 class ConnectionsView(APIView):
@@ -18,8 +18,9 @@ class ConnectionsView(APIView):
         connection_request = ConnectionSearchSerializer(data=request.data)
         if not connection_request.is_valid():
             return Response(connection_request.errors, status=400)
-        result = Algorithm().calculate_path(connection_request.validated_data['departure_station'],connection_request.validated_data['arrival_station'],'t')
-        return Response({"content":ConnectionResponseSerializer(result,many=True).data}, status=200)
+        result = Algorithm().calculate_path(connection_request.validated_data['departure_station'],connection_request.validated_data['arrival_station'],'t',n_paths=connection_request.validated_data.get('number_of_connections', 5),start_time= connection_request.validated_data.get('time', '00:00:00'))
+        print(result)
+        return Response({"content":ResultSerializer(result,many=True).data}, status=200)
 
 class StationView(APIView):
     permission_classes = [IsAuthenticated]
