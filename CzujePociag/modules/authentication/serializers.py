@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from django.db import IntegrityError
 from modules.authentication.models import CustomUser
 
 
@@ -14,13 +14,20 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = ("email", "password")
 
+    def validate_email(self, value):
+        if CustomUser.objects.filter(email=value).exists():
+            raise serializers.ValidationError("User with this email already exists.")
+        return value
+
     def create(self, validated_data):
-        user = CustomUser.objects.create(email=validated_data["email"])
-
-        user.set_password(validated_data["password"])
-        user.save()
-
-        return user
+        try:
+            user = CustomUser.objects.create_user(
+                email=validated_data["email"],
+                password=validated_data["password"]
+            )
+            return user
+        except IntegrityError:
+            raise serializers.ValidationError({"email": "User with this email already exists."})
 
 
 class ActivationSerializer(serializers.Serializer):

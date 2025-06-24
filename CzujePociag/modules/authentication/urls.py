@@ -10,4 +10,5 @@ urlpatterns = [
         views.ActivationView.as_view(),
         name="auth_activation",
     ),
+    path("delete/", views.DeleteAccountView.as_view(), name="delete_account"),
 ]
