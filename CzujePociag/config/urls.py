@@ -23,4 +23,5 @@ urlpatterns = [
     path("", include("modules.trains.urls")),
     path("", include("modules.users.urls")),
     path("", include("modules.connections.urls")),
+    path('oidc/', include('mozilla_django_oidc.urls'))
 ]

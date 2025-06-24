@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "rest_framework_simplejwt",
+#     "rest_framework_simplejwt",
     "modules.authentication",
     "modules.core",
     "modules.users",
@@ -67,37 +67,71 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+#         "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "drf_oidc_auth.authentication.OIDCAuthentication"
     ),
     # "EXCEPTION_HANDLER": "modules.authentication.exception_handler.custom_exception_handler",
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+
+}
+AUTHENTICATION_BACKENDS = (
+    'mozilla_django_oidc.auth.OIDCAuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+OIDC_RP_CLIENT_ID = "AUTH0_CLIENT_ID"
+OIDC_RP_CLIENT_SECRET = "AUTH0_CLIENT_SECRET"
+
+# Endpoint URLs
+AUTH0_DOMAIN = "dev-abc123.us.auth0.com"   # Replace with your Auth0 domain
+OIDC_OP_ISSUER = f"https://{AUTH0_DOMAIN}/"
+OIDC_OP_AUTHORIZATION_ENDPOINT = f"https://{AUTH0_DOMAIN}/authorize"
+OIDC_OP_TOKEN_ENDPOINT = f"https://{AUTH0_DOMAIN}/oauth/token"
+OIDC_OP_USER_ENDPOINT = f"https://{AUTH0_DOMAIN}/userinfo"
+OIDC_OP_JWKS_ENDPOINT = f"https://{AUTH0_DOMAIN}/.well-known/jwks.json"
+
+# Set your API audience here if you want to restrict tokens
+OIDC_RP_SCOPES = "openid email profile"
+
+LOGIN_URL = "/oidc/authenticate/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+
+DRF_OIDC_AUTH = {
+    "OIDC_ENDPOINT": f"https://{AUTH0_DOMAIN}/",
+    "AUDIENCES": ["https://yourdomain.com/api/"],  # This should match the Auth0 API identifier (audience)
 }
 
-AUTH_USER_MODEL = "authentication.CustomUser"
+# Or, directly, for more control:
+OIDC_OP_JWKS_ENDPOINT = f"https://{AUTH0_DOMAIN}/.well-known/jwks.json"
+OIDC_OP_ISSUER = f"https://{AUTH0_DOMAIN}/"
+OIDC_OP_AUDIENCE = ["https://yourdomain.com/api/"]
 
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1800),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=500),
-    "ROTATE_REFRESH_TOKENS": True,
-    "BLACKLIST_AFTER_ROTATION": True,
-    "UPDATE_LAST_LOGIN": False,
-    "ALGORITHM": "HS256",
-    "VERIFYING_KEY": None,
-    "AUDIENCE": None,
-    "ISSUER": None,
-    "JWK_URL": None,
-    "LEEWAY": 0,
-    "AUTH_HEADER_TYPES": ("Bearer",),
-    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
-    "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
-    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
-    "TOKEN_TYPE_CLAIM": "token_type",
-    "TOKEN_USER_CLASS": "rest_framework_simplejwt.models.TokenUser",
-    "JTI_CLAIM": "jti",
-    "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
-    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
-    "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
-}
+# AUTH_USER_MODEL = "authentication.CustomUser"
+
+# SIMPLE_JWT = {
+#     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1800),
+#     "REFRESH_TOKEN_LIFETIME": timedelta(days=500),
+#     "ROTATE_REFRESH_TOKENS": True,
+#     "BLACKLIST_AFTER_ROTATION": True,
+#     "UPDATE_LAST_LOGIN": False,
+#     "ALGORITHM": "HS256",
+#     "VERIFYING_KEY": None,
+#     "AUDIENCE": None,
+#     "ISSUER": None,
+#     "JWK_URL": None,
+#     "LEEWAY": 0,
+#     "AUTH_HEADER_TYPES": ("Bearer",),
+#     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
+#     "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
+#     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+#     "TOKEN_TYPE_CLAIM": "token_type",
+#     "TOKEN_USER_CLASS": "rest_framework_simplejwt.models.TokenUser",
+#     "JTI_CLAIM": "jti",
+#     "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
+#     "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
+#     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
+# }
 
 
 MIDDLEWARE = [
