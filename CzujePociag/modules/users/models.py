@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 from modules.core.models import BaseModel
 
@@ -9,7 +10,7 @@ class User(BaseModel):
     email = models.EmailField(unique=True)
 
 class Ticket(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tickets')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='tickets')
     seat = models.CharField(max_length=10)
     wagon = models.CharField(max_length=10)
     train_number = models.CharField(max_length=20)

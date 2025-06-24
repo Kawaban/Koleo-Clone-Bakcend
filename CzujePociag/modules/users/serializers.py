@@ -12,9 +12,13 @@ class TicketSerializer(serializers.Serializer):
     departure_time = serializers.DateTimeField()
     arrival_time = serializers.DateTimeField()
 
-    def create(self, validated_data, *args, **kwargs):
+    def create(self, validated_data):
+        user = validated_data.pop('user', None)
+        if not user:
+            raise serializers.ValidationError("User is required to create a ticket")
+            
         return Ticket.objects.create(
-            user=kwargs.get('user'),
+            user=user,
             seat=validated_data["seat_number"],
             wagon=validated_data["wagon_number"],
             train_number=validated_data["train_number"],
@@ -26,8 +30,8 @@ class TicketSerializer(serializers.Serializer):
 
     def to_representation(self, instance):
         return {
-            'seat_number': instance.seat_number,
-            'wagon_number': instance.wagon_number,
+            'seat_number': instance.seat,
+            'wagon_number': instance.wagon,
             'train_number': instance.train_number,
             'departure_station': instance.departure_station,
             'arrival_station': instance.arrival_station,

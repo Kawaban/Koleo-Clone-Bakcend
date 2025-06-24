@@ -11,9 +11,9 @@ class ConnectionResponseSerializer(serializers.Serializer):
         return {
             'departure_station': instance.departure_station,
             'arrival_station': instance.arrival_station,
-            'departure_time': instance.departure_time.isoformat(),
-            'arrival_time': instance.arrival_time.isoformat(),
+            'departure_time': instance.departure_time,
+            'arrival_time': instance.arrival_time,
             'duration': str(instance.duration),
             'train_number': instance.train_number,
-            'price': str(instance.price)
+            'price': str(instance.cost)
         }
