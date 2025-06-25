@@ -6,7 +6,7 @@ from modules.core.models import BaseModel
 # Create your models here.
 
 class User(BaseModel):
-    email = models.EmailField(unique=True)
+    sub = models.CharField(unique=True, max_length=255)
 
 class Ticket(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tickets')

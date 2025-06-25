@@ -12,12 +12,14 @@ from modules.users.user_service import UserService
 class TicketView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
-        user = UserService().get_user_by_email(request.user.email)
+        print("Fetching tickets for user:", request.user.id)
+
+        user = UserService().get_user_by_sub(request.user.id)
         tickets = user.tickets
         return Response({"content": TicketSerializer(tickets, many=True).data})
 
     def post(self, request):
-        user = UserService().get_user_by_email(request.user.email)
+        user = UserService().get_user_by_sub(request.user.id)
         serializer = TicketSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         if not TrainService().reserve_seat(serializer.validated_data["seat_number"], serializer.validated_data["wagon_number"], serializer.validated_data["train_number"]):

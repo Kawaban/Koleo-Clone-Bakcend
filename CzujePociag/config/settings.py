@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 
+import requests
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -38,12 +40,18 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-#     "rest_framework_simplejwt",
+    "rest_framework_simplejwt",
     "modules.authentication",
     "modules.core",
     "modules.users",
     "modules.trains",
     "modules.connections",
+    'corsheaders'
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "https://your-frontend-domain.com",
 ]
 
 AUTH_PWD_MODULE = "django.contrib.auth.password_validation."
@@ -66,46 +74,50 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-#         "rest_framework_simplejwt.authentication.JWTAuthentication",
-        "drf_oidc_auth.authentication.OIDCAuthentication"
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'modules.authentication.authentication.Auth0JSONWebTokenAuthentication',
     ),
     # "EXCEPTION_HANDLER": "modules.authentication.exception_handler.custom_exception_handler",
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 
 }
-AUTHENTICATION_BACKENDS = (
-    'mozilla_django_oidc.auth.OIDCAuthenticationBackend',
-    'django.contrib.auth.backends.ModelBackend',
-)
+# AUTHENTICATION_BACKENDS = (
+#     'mozilla_django_oidc.auth.OIDCAuthenticationBackend',
+#     'django.contrib.auth.backends.ModelBackend',
+# )
 
-OIDC_RP_CLIENT_ID = "AUTH0_CLIENT_ID"
-OIDC_RP_CLIENT_SECRET = "AUTH0_CLIENT_SECRET"
+OIDC_RP_CLIENT_ID = "9PfVOeao1lffpzt7VzUtjsXX1G609Le8"
+OIDC_RP_CLIENT_SECRET = "iXMBZIW8ZiLivDlHX9y0sy0OVEBEv18MU-exERkbzseezLDypXXWRQUNvDo5tSFA"
+
+def get_auth0_public_key():
+    jsonurl = requests.get(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
+    jwks = jsonurl.json()
+    return jwks
 
 # Endpoint URLs
-AUTH0_DOMAIN = "dev-abc123.us.auth0.com"   # Replace with your Auth0 domain
+AUTH0_DOMAIN = "dev-1jlpucnk4u6by33k.us.auth0.com"   # Replace with your Auth0 domain
 OIDC_OP_ISSUER = f"https://{AUTH0_DOMAIN}/"
 OIDC_OP_AUTHORIZATION_ENDPOINT = f"https://{AUTH0_DOMAIN}/authorize"
 OIDC_OP_TOKEN_ENDPOINT = f"https://{AUTH0_DOMAIN}/oauth/token"
 OIDC_OP_USER_ENDPOINT = f"https://{AUTH0_DOMAIN}/userinfo"
 OIDC_OP_JWKS_ENDPOINT = f"https://{AUTH0_DOMAIN}/.well-known/jwks.json"
-
+OIDC_RP_SIGN_ALGO = 'RS256'
 # Set your API audience here if you want to restrict tokens
 OIDC_RP_SCOPES = "openid email profile"
 
-LOGIN_URL = "/oidc/authenticate/"
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
+# LOGIN_URL = "/oidc/authenticate/"
+# LOGIN_REDIRECT_URL = "/token/"
+# LOGOUT_REDIRECT_URL = "/"
 
 DRF_OIDC_AUTH = {
     "OIDC_ENDPOINT": f"https://{AUTH0_DOMAIN}/",
-    "AUDIENCES": ["https://yourdomain.com/api/"],  # This should match the Auth0 API identifier (audience)
+    "AUDIENCES": ["https://dev-1jlpucnk4u6by33k.us.auth0.com/api/v2/"],  # This should match the Auth0 API identifier (audience)
 }
 
 # Or, directly, for more control:
 OIDC_OP_JWKS_ENDPOINT = f"https://{AUTH0_DOMAIN}/.well-known/jwks.json"
 OIDC_OP_ISSUER = f"https://{AUTH0_DOMAIN}/"
-OIDC_OP_AUDIENCE = ["https://yourdomain.com/api/"]
+OIDC_OP_AUDIENCE = ["https://my-api.local"]
 
 # AUTH_USER_MODEL = "authentication.CustomUser"
 
@@ -133,8 +145,24 @@ OIDC_OP_AUDIENCE = ["https://yourdomain.com/api/"]
 #     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
 # }
 
+# Allow credentials (needed for Auth0 tokens)
+CORS_ALLOW_CREDENTIALS = True
+
+# Headers that can be used during the actual request
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

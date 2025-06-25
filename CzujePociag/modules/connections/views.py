@@ -1,6 +1,6 @@
 from django.db import connection
 from django.shortcuts import render
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 # Create your views here.
 
@@ -13,7 +13,7 @@ from modules.connections.serializers import ConnectionSearchSerializer, Connecti
 
 
 class ConnectionsView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = (AllowAny,)
     def post(self, request):
         connection_request = ConnectionSearchSerializer(data=request.data)
         if not connection_request.is_valid():
@@ -23,7 +23,7 @@ class ConnectionsView(APIView):
         return Response({"content":ResultSerializer(result,many=True).data}, status=200)
 
 class StationView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = (AllowAny,)
     def get(self, request):
         stations = Station.objects.all()
         return Response({"stations": [station.name for station in stations]}, status=200)
