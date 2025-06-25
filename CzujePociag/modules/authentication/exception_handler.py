@@ -6,7 +6,6 @@ from rest_framework.views import exception_handler
 def custom_exception_handler(exc, context):
     try:
         exception_class = exc.__class__.__name__
-        print(exception_class)
         handlers = {
             "BadCredentialsException": _handler_bad_credentials,
             "ValidationError": _handler_validation_error,
@@ -24,6 +23,7 @@ def custom_exception_handler(exc, context):
             # if there is no hanlder is presnet
             message = str(exc)
             status_code = HTTP_500_INTERNAL_SERVER_ERROR
+
 
         return Response(data={"error": message}, status=status_code)
     except Exception as e:

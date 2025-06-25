@@ -59,7 +59,6 @@ class RegisterView(APIView):
             serializer = RegisterSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             auth_user = serializer.create(serializer.validated_data)
-
             return Response({"content": "User created"}, status=201)
         except serializers.ValidationError as e:
             return Response({"error": e.detail}, status=400)
