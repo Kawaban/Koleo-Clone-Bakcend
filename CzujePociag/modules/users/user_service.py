@@ -6,6 +6,7 @@ class UserService:
         return User.objects.get(sub=sub)
 
     def create_user(self, sub):
-        return User.objects.create(
-            email=sub
-        )
+        if not User.objects.filter(sub=sub).exists():
+            User.objects.create(
+                email=sub
+            )

@@ -7,7 +7,7 @@ from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 
 from config.settings import AUTH0_DOMAIN, OIDC_OP_AUDIENCE
-
+from modules.users.user_service import UserService
 
 AUTH0_DOMAIN = "dev-1jlpucnk4u6by33k.us.auth0.com"
 OIDC_OP_AUDIENCE = "https://my-api.local"  # Change to your API identifier in Auth0
@@ -67,6 +67,8 @@ class Auth0JSONWebTokenAuthentication(BaseAuthentication):
                 "email": payload.get("email", ""),
                 "is_authenticated": True
             })()
+
+            UserService().create_user(payload['sub'])
 
             return (user, token)
 
